@@ -12,12 +12,15 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LessonsGetterTest {
+
     public static Stream<Arguments> testCases() {
         return Stream.of(
+                // Пустое расписание
                 Arguments.of("EmptyTimetable",
                         Map.of(),
                         Set.of()),
 
+                // Расписание без уроков (все дни пустые)
                 Arguments.of("TimetableWithoutLessons",
                         Map.of("Monday", List.of(),
                                 "Tuesday", List.of(),
@@ -26,13 +29,30 @@ public class LessonsGetterTest {
                                 "Friday", List.of()),
                         Set.of()),
 
+                // Расписание с уроками (уникальные предметы)
                 Arguments.of("TimetableWithLessons",
                         Map.of("Monday", List.of("English", "Mathematics", "Chemistry"),
                                 "Tuesday", List.of("Biology", "Informatics"),
                                 "Wednesday", List.of("Geography", "Astronomy", "English"),
                                 "Thursday", List.of("Mathematics", "Literature"),
                                 "Friday", List.of("Physics", "Technology", "English")),
-                        Set.of("Biology", "English", "Physics", "Astronomy", "Chemistry", "Geography", "Literature", "Technology", "Informatics", "Mathematics"))
+                        Set.of("Biology", "English", "Physics", "Astronomy", "Chemistry", "Geography", "Literature", "Technology", "Informatics", "Mathematics")),
+
+                // Предметы с разным регистром
+                Arguments.of("TimetableWithDifferentCaseLessons",
+                        Map.of("Monday", List.of("English", "mathematics", "chemistry"),
+                                "Tuesday", List.of("Biology", "informatics"),
+                                "Wednesday", List.of("Geography", "astronomy", "english"),
+                                "Thursday", List.of("Mathematics", "literature"),
+                                "Friday", List.of("physics", "Technology", "english")),
+                        Set.of("Biology", "English", "mathematics", "physics", "astronomy", "chemistry", "Geography", "literature", "Technology", "informatics", "Mathematics")),
+
+                // Расписание с дубликатами уроков на разных днях
+                Arguments.of("TimetableWithDuplicateLessons",
+                        Map.of("Monday", List.of("English", "Mathematics", "Chemistry"),
+                                "Tuesday", List.of("English", "Mathematics", "Chemistry"),
+                                "Wednesday", List.of("English", "Mathematics", "Chemistry")),
+                        Set.of("English", "Mathematics", "Chemistry"))
         );
     }
 
