@@ -12,13 +12,16 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DeveloperProjectFinderTest {
+
     public static Stream<Arguments> testCases() {
         return Stream.of(
+                // Пустая карта проектов
                 Arguments.of("EmptyProjectsMap",
                         Map.of(),
                         "Robert",
                         List.of()),
 
+                // Разработчик не участвует ни в одном проекте
                 Arguments.of("NoProjects",
                         Map.of("AXE", Set.of("Helen", "Bob", "Marian", "Tom"),
                                 "MazPay", Set.of("James", "John"),
@@ -28,6 +31,7 @@ public class DeveloperProjectFinderTest {
                         "Robert",
                         List.of()),
 
+                // Разработчик участвует в нескольких проектах
                 Arguments.of("HaveProjects",
                         Map.of("AXE", Set.of("Helen", "Bob", "Marian", "Tom"),
                                 "MazPay", Set.of("James", "John", "Robert"),
@@ -35,7 +39,24 @@ public class DeveloperProjectFinderTest {
                                 "DelFo", Set.of("Patricia", "Jessica", "Mark", "Paul"),
                                 "ReaNon", Set.of("George", "Kyle", "Robert", "Brandon", "Austin")),
                         "Robert",
-                        List.of("ReaNon", "MazPay", "SeaV"))
+                        List.of("ReaNon", "MazPay", "SeaV")),
+
+                // Несколько проектов с одинаковой длиной имени
+                Arguments.of("ProjectsWithSameLength",
+                        Map.of("AXE", Set.of("Ivan"),
+                                "BEE", Set.of("Ivan"),
+                                "SEE", Set.of("Ivan"),
+                                "ZEE", Set.of("Ivan")),
+                        "Ivan",
+                        List.of("ZEE", "SEE", "BEE", "AXE")),
+
+                // Разработчик указан в одном проекте несколько раз
+                Arguments.of("DeveloperListedMultipleTimes",
+                        Map.of("AXE", Set.of("Ivan", "Ivan"),
+                                "BEE", Set.of("Ivan", "Alex"),
+                                "SEE", Set.of("Ivan")),
+                        "Ivan",
+                        List.of("SEE", "BEE", "AXE"))
         );
     }
 
